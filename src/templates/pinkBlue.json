@@ -1,0 +1,163 @@
+{
+  "id": "pinkBlue",
+  "name": "Pink Blue",
+  "size": { "width": 643, "height": 383 },
+  "background": { "color": "#FFFFFF" },
+  "shapes": [
+    {
+      "type": "rect",
+      "x": 20,
+      "y": 20,
+      "w": 603,
+      "h": 343,
+      "fill": "#FFFFFF",
+      "radius": 12
+    },
+    {
+      "type": "image",
+      "x": 20,
+      "y": 20,
+      "w": 603,
+      "h": 343,
+      "path": "/card-background-images/pink-blue.jpg",
+      "fit": "cover",
+      "radius": 12
+    },
+    {
+      "type": "dashedRect",
+      "x": 550,
+      "y": 65,
+      "w": 73,
+      "h": 73,
+      "stroke": "#B9B9B9",
+      "dash": [6, 6],
+      "radius": 4
+    }
+  ],
+  "fields": [
+    {
+      "key": "lastName",
+      "label": "Last Name",
+      "box": { "x": 60, "y": 90, "w": 220, "h": 35 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 20,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "placeholder": "Last Name"
+    },
+    {
+      "key": "firstName",
+      "label": "First Name",
+      "box": { "x": 60, "y": 130, "w": 220, "h": 35 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 20,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "placeholder": "First Name"
+    },
+    {
+      "key": "occupation",
+      "label": "Occupation",
+      "box": { "x": 60, "y": 175, "w": 220, "h": 32 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "color": "#000000"
+      },
+      "placeholder": "Occupation"
+    },
+    {
+      "key": "landline",
+      "label": "Landline",
+      "box": { "x": 60, "y": 220, "w": 220, "h": 27 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "placeholder": "Landline"
+    },
+    {
+      "key": "fax",
+      "label": "Fax",
+      "box": { "x": 60, "y": 250, "w": 220, "h": 27 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "placeholder": "Fax"
+    },
+    {
+      "key": "address",
+      "label": "Address",
+      "box": { "x": 60, "y": 280, "w": 220, "h": 50 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000",
+        "lineHeight": 1.2
+      },
+      "placeholder": "Address"
+    },
+    {
+      "key": "mobile",
+      "label": "Mobile",
+      "box": { "x": 300, "y": 90, "w": 200, "h": 27 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "placeholder": "Mobile"
+    },
+    {
+      "key": "email",
+      "label": "Email",
+      "box": { "x": 300, "y": 120, "w": 200, "h": 27 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "placeholder": "email@example.com"
+    },
+    {
+      "key": "company",
+      "label": "Company",
+      "box": { "x": 60, "y": 335, "w": 220, "h": 27 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "placeholder": "Company"
+    },
+    {
+      "key": "logo",
+      "label": "Logo (upload)",
+      "box": { "x": 550, "y": 65, "w": 73, "h": 73 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 8,
+        "color": "#6B7280",
+        "align": "center"
+      }
+    }
+  ],
+  "defaults": {
+    "firstName": "",
+    "lastName": "",
+    "occupation": "",
+    "mobile": "",
+    "email": "",
+    "landline": "",
+    "fax": "",
+    "address": "",
+    "company": ""
+  }
+}
