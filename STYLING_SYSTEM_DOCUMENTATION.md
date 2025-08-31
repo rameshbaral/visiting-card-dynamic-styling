@@ -14,6 +14,7 @@
 10. [Creating Custom Templates](#creating-custom-templates)
 11. [Field Types & Validation](#field-types--validation)
 12. [Responsive Considerations](#responsive-considerations)
+13. [Dynamic Styling Implementation](#dynamic-styling-implementation)
 
 ---
 
@@ -1401,6 +1402,525 @@ Cache-Control: private, max-age=86400
 - API failure rates
 - User interaction issues
 - Export success rates
+
+---
+
+## Dynamic Styling Implementation
+
+### Overview
+
+The dynamic styling system transforms JSON-based template configurations into live DOM styling and interactive card elements. This section explains how values from template files like `blueGray.json` flow through the application to create the final rendered card.
+
+### Data Flow Architecture
+
+```mermaid
+graph TD
+    A[Template JSON File] --> B[Template Store]
+    B --> C[CardCanvas Component]
+    C --> D[Field Rendering]
+    D --> E[Dynamic CSS Styles]
+    E --> F[DOM Elements]
+
+    G[User Input] --> H[Field Store]
+    H --> C
+
+    I[Logo Upload] --> J[Logo Store]
+    J --> C
+
+    style A fill:#e1f5fe
+    style F fill:#c8e6c9
+```
+
+### 1. Template JSON Structure to Component Mapping
+
+#### Template JSON Configuration (blueGray.json example)
+
+```json
+{
+  "id": "blueGray",
+  "name": "Blue Gray",
+  "size": { "width": 643, "height": 383 },
+  "background": { "color": "#FFFFFF" },
+  "fields": [
+    {
+      "key": "firstName",
+      "label": "First Name",
+      "box": { "x": 110, "y": 110, "w": 238, "h": 35 },
+      "style": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 20,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "placeholder": "First Name"
+    }
+  ]
+}
+```
+
+#### Component Implementation (CardCanvas.tsx)
+
+The template JSON is processed in `CardCanvas.tsx` through the following steps:
+
+```typescript
+// 1. Template Loading (lines 15, 52-53)
+const { currentTemplate, fields, logo, setField } = useCardStore();
+
+// 2. Field Rendering Loop (line 218)
+{currentTemplate.fields.map(renderField)}
+
+// 3. Style Transformation (lines 95-112)
+const renderField = (field: FieldSpec, index: number) => {
+  const value = fields[field.key] || "";
+  const style = field.style; // JSON style object
+
+  // Transform JSON style to CSS-in-JS
+  const textStyle = {
+    fontFamily: style.fontFamily,     // "Inter, ui-sans-serif"
+    fontSize: style.fontSize,         // 20
+    fontWeight: style.weight,         // "bold"
+    color: style.color,              // "#000000"
+    letterSpacing: style.letterSpacing,
+    lineHeight: style.lineHeight,
+    textAlign: style.align as "left" | "center" | "right",
+    textTransform: style.uppercase ? "uppercase" : "none",
+    opacity: style.opacity,
+  };
+```
+
+### 2. Field Positioning System
+
+#### Bounding Box Implementation
+
+Each field's `box` property from the JSON directly maps to CSS positioning:
+
+```typescript
+// JSON Configuration
+"box": { "x": 110, "y": 110, "w": 238, "h": 35 }
+
+// CSS Implementation (lines 140-145)
+<div
+  className="absolute"
+  style={{
+    left: field.box.x,    // 110px
+    top: field.box.y,     // 110px
+    width: field.box.w,   // 238px
+    height: field.box.h,  // 35px
+  }}
+>
+```
+
+#### Practical Example: firstName Field from blueGray.json
+
+**JSON Definition:**
+
+```json
+{
+  "key": "firstName",
+  "box": { "x": 110, "y": 110, "w": 238, "h": 35 },
+  "style": {
+    "fontFamily": "Inter, ui-sans-serif",
+    "fontSize": 20,
+    "weight": "bold",
+    "color": "#000000"
+  },
+  "placeholder": "First Name"
+}
+```
+
+**Rendered DOM Output:**
+
+```html
+<div
+  class="absolute"
+  style="left: 110px; top: 110px; width: 238px; height: 35px;"
+>
+  <input
+    type="text"
+    value="John"
+    placeholder="First Name"
+    style="
+      font-family: Inter, ui-sans-serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: #000000;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+    "
+  />
+</div>
+```
+
+### 3. Typography Style Transformation
+
+#### Style Property Mapping
+
+The system maps JSON style properties to CSS properties with type safety:
+
+```typescript
+interface TextStyle {
+  fontFamily: string; // Direct mapping to CSS font-family
+  fontSize: number; // Converted to CSS font-size (px)
+  weight?: number | "bold"; // Maps to CSS font-weight
+  color: string; // Direct mapping to CSS color
+  letterSpacing?: number; // Maps to CSS letter-spacing
+  lineHeight?: number; // Maps to CSS line-height
+  align?: "left" | "center" | "right"; // Maps to CSS text-align
+  uppercase?: boolean; // Maps to CSS text-transform
+  opacity?: number; // Maps to CSS opacity
+}
+```
+
+#### Example Transformations from blueGray.json
+
+**1. Primary Name Fields (firstName, lastName)**
+
+JSON:
+
+```json
+"style": {
+  "fontFamily": "Inter, ui-sans-serif",
+  "fontSize": 20,
+  "weight": "bold",
+  "color": "#000000"
+}
+```
+
+CSS Result:
+
+```css
+font-family: Inter, ui-sans-serif;
+font-size: 20px;
+font-weight: bold;
+color: #000000;
+```
+
+**2. Contact Information Fields (mobile, email, etc.)**
+
+JSON:
+
+```json
+"style": {
+  "fontFamily": "Inter, ui-sans-serif",
+  "fontSize": 13,
+  "color": "#000000"
+}
+```
+
+CSS Result:
+
+```css
+font-family: Inter, ui-sans-serif;
+font-size: 13px;
+font-weight: normal; /* default */
+color: #000000;
+```
+
+**3. Logo Field (special case)**
+
+JSON:
+
+```json
+"style": {
+  "fontFamily": "Inter, ui-sans-serif",
+  "fontSize": 8,
+  "color": "#6B7280",
+  "align": "center"
+}
+```
+
+CSS Result:
+
+```css
+font-family: Inter, ui-sans-serif;
+font-size: 8px;
+color: #6b7280;
+text-align: center;
+```
+
+### 4. State Management and Dynamic Updates
+
+#### Zustand Store Integration
+
+The styling system integrates with Zustand state management for real-time updates:
+
+```typescript
+// useCardStore.ts (lines 14-31)
+interface CardStore {
+  currentTemplate: TemplateDesign; // Contains all field styles
+  fields: Record<FieldKey, string>; // User input values
+  setField: (key: FieldKey, value: string) => void;
+}
+
+// Template switching triggers style updates (lines 59-72)
+setTemplate: (templateId: string) => {
+  const template = templates.find((t) => t.id === templateId);
+  if (template) {
+    set({
+      currentTemplate: template, // New styles applied
+      fields: { ...getEmptyFields(), ...template.defaults },
+    });
+  }
+};
+```
+
+#### Real-time Style Application
+
+When users input text, the styling from the template JSON is immediately applied:
+
+```typescript
+// Field value update (lines 124-128)
+const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setField(field.key, e.target.value); // Updates store
+};
+
+// Style remains constant from template JSON
+const textStyle = {
+  fontFamily: style.fontFamily, // From template
+  fontSize: style.fontSize, // From template
+  // ... other properties from template
+};
+```
+
+### 5. Field Type-Specific Implementations
+
+#### Text Input Fields
+
+Most fields render as standard text inputs with template styling:
+
+```typescript
+// Regular text fields (lines 171-183)
+<input
+  type="text"
+  value={value} // From user store
+  onChange={handleFieldChange} // Updates user store
+  placeholder={field.placeholder} // From template JSON
+  className="w-full h-full bg-transparent border-none outline-none"
+  style={textStyle} // From template JSON
+  autoFocus
+/>
+```
+
+#### Address Field (Multiline)
+
+The address field uses a textarea with the same styling system:
+
+```typescript
+// Address field special case (lines 160-170)
+<textarea
+  value={value}
+  onChange={handleFieldChange}
+  placeholder={field.placeholder}
+  className="w-full h-full bg-transparent border-none outline-none resize-none"
+  style={textStyle} // Same style transformation
+  autoFocus
+/>
+```
+
+#### Logo Field (Image)
+
+The logo field has conditional rendering based on content:
+
+```typescript
+// Logo field implementation (lines 147-158)
+{field.key === "logo" ? (
+  logo ? (
+    <img
+      src={logo}
+      alt="Logo"
+      className="w-full h-full object-contain"
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+      Logo
+    </div>
+  )
+)}
+```
+
+### 6. Interactive States and Styling
+
+#### Edit Mode Styling
+
+The system applies different visual states based on interaction mode:
+
+```typescript
+// Edit mode detection (lines 114-118)
+const handleFieldClick = () => {
+  if (isEditing && field.key !== "logo") {
+    setEditingField(field.key);
+  }
+};
+
+// Visual feedback for editable fields (lines 185-196)
+<div
+  className={`w-full h-full flex items-center ${
+    isEditing
+      ? "cursor-text hover:bg-white hover:bg-opacity-10 rounded px-1"
+      : ""
+  }`}
+  style={textStyle} // Template styles always applied
+  onClick={handleFieldClick}
+>
+```
+
+#### Export Mode Styling
+
+During export, certain UI elements are hidden while maintaining template styling:
+
+```typescript
+// Export mode handling (lines 72-73, 194)
+case "dashedRect":
+  if (isExporting) return null; // Hide guides during export
+
+// Placeholder text handling in export
+{value || (isExporting ? "" : field.placeholder)}
+```
+
+### 7. Template Switching and Style Updates
+
+#### Dynamic Template Loading
+
+When switching between templates, the entire styling system updates:
+
+```typescript
+// Template switching in store (lines 59-72)
+setTemplate: (templateId: string) => {
+  const template = templates.find((t) => t.id === templateId);
+  if (template) {
+    set({
+      currentTemplateId: templateId,
+      currentTemplate: template, // New field styles
+      fields: { ...getEmptyFields(), ...template.defaults },
+      logo: get().logo,
+    });
+  }
+};
+```
+
+#### Style Inheritance and Defaults
+
+Each template can define default values while maintaining consistent styling patterns:
+
+```json
+// blueGray.json defaults
+"defaults": {
+  "firstName": "",
+  "lastName": "",
+  "occupation": "",
+  // ...
+}
+```
+
+### 8. Performance Optimizations
+
+#### Style Object Memoization
+
+The style transformation happens on each render but could be optimized:
+
+```typescript
+// Current implementation (potentially optimizable)
+const textStyle = {
+  fontFamily: style.fontFamily,
+  fontSize: style.fontSize,
+  // ... computed on every render
+};
+
+// Potential optimization with useMemo
+const textStyle = useMemo(
+  () => ({
+    fontFamily: style.fontFamily,
+    fontSize: style.fontSize,
+    fontWeight: style.weight,
+    color: style.color,
+    letterSpacing: style.letterSpacing,
+    lineHeight: style.lineHeight,
+    textAlign: style.align as "left" | "center" | "right",
+    textTransform: style.uppercase ? "uppercase" : "none",
+    opacity: style.opacity,
+  }),
+  [style]
+);
+```
+
+### 9. CSS-in-JS vs Template JSON
+
+#### Advantages of JSON-based Styling
+
+1. **Data-driven**: Styles are data, not code
+2. **Runtime flexibility**: Easy template switching
+3. **API-friendly**: Templates can be served from backend
+4. **Version control**: Templates as configuration files
+5. **Non-technical editing**: Designers can modify JSON
+
+#### Style Application Flow
+
+```
+Template JSON → TypeScript Interface → React Component → CSS-in-JS → DOM Styles
+```
+
+### 10. Debugging and Development
+
+#### Style Debugging
+
+To debug styling issues, inspect the data flow:
+
+1. **Template JSON**: Verify field style properties
+2. **Store State**: Check `currentTemplate` in React DevTools
+3. **Component Props**: Verify `field.style` object
+4. **Computed Styles**: Check `textStyle` object in browser
+5. **DOM Output**: Inspect final CSS properties
+
+#### Common Styling Issues
+
+1. **Missing styles**: Check if field exists in template JSON
+2. **Positioning issues**: Verify `box` coordinates within canvas bounds
+3. **Font loading**: Ensure font family is loaded
+4. **Color contrast**: Verify hex color values
+5. **Responsive issues**: Check if styles work across screen sizes
+
+### 11. Extending the Styling System
+
+#### Adding New Style Properties
+
+To add new styling capabilities:
+
+1. **Update TypeScript interface** (`src/types/index.ts`):
+
+```typescript
+export type TextStyle = {
+  // existing properties...
+  textShadow?: string; // New property
+  textDecoration?: string;
+};
+```
+
+2. **Update style transformation** (`CardCanvas.tsx`):
+
+```typescript
+const textStyle = {
+  // existing properties...
+  textShadow: style.textShadow,
+  textDecoration: style.textDecoration,
+};
+```
+
+3. **Update template JSON**:
+
+```json
+{
+  "style": {
+    "fontSize": 20,
+    "textShadow": "1px 1px 2px rgba(0,0,0,0.3)",
+    "textDecoration": "underline"
+  }
+}
+```
+
+This comprehensive documentation shows exactly how the dynamic styling system transforms JSON configuration from files like `blueGray.json` into live, interactive styled components in the DOM.
 
 ---
 
