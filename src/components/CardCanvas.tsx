@@ -202,17 +202,20 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
   };
 
   return (
-    <div className="flex justify-center items-center p-8 bg-gray-100 min-h-screen">
+    <div className="flex flex-col">
+      <div className="mb-4 text-sm text-gray-600">
+        Click on fields to edit them. Upload a logo using the controls on the
+        right.
+      </div>
+
       <div
         ref={canvasRef}
         data-canvas-export
-        className="relative bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="relative bg-white border-2 border-dashed border-gray-300 rounded-lg overflow-hidden"
         style={{
-          width: currentTemplate.size.width,
-          height: currentTemplate.size.height,
+          width: 643,
+          height: 383,
           backgroundColor: currentTemplate.background?.color || "transparent",
-          maxWidth: "100%",
-          maxHeight: "100vh",
         }}
       >
         {/* Render shapes */}
@@ -220,6 +223,11 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
 
         {/* Render fields */}
         {currentTemplate.fields.map(renderField)}
+      </div>
+
+      {/* Canvas info */}
+      <div className="mt-2 text-xs text-gray-500 text-center">
+        Canvas: 643×383px (Business Card Size)
       </div>
     </div>
   );

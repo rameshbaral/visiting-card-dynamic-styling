@@ -123,25 +123,25 @@ const CanvasDesigner: React.FC<CanvasDesignerProps> = ({
     // Add background rectangle
     shapes.push({
       type: "rect",
-      x: 20,
-      y: 20,
-      w: 603,
-      h: 343,
+      x: 0,
+      y: 0,
+      w: 643,
+      h: 383,
       fill: "#FFFFFF",
-      radius: 12,
+      radius: 0,
     });
 
     // Add background image if selected
     if (selectedBackground) {
       shapes.push({
         type: "image",
-        x: 20,
-        y: 20,
-        w: 603,
-        h: 343,
+        x: 0,
+        y: 0,
+        w: 643,
+        h: 383,
         path: selectedBackground,
         fit: "cover",
-        radius: 12,
+        radius: 0,
       });
     }
 
