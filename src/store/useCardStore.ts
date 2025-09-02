@@ -24,6 +24,11 @@ interface CardStore {
   setLogo: (logoDataUrl: string | null) => void;
   resetFields: () => void;
 
+  // Template management
+  customTemplates: TemplateDesign[];
+  addCustomTemplate: (template: TemplateDesign) => void;
+  removeCustomTemplate: (templateId: string) => void;
+
   // Save/Load functionality
   savedDesigns: SavedDesign[];
   saveDesign: (name: string) => void;
@@ -53,11 +58,13 @@ export const useCardStore = create<CardStore>()(
       currentTemplate: getDefaultTemplate(),
       fields: getEmptyFields(),
       logo: null,
+      customTemplates: [],
       savedDesigns: [],
 
       // Actions
       setTemplate: (templateId: string) => {
-        const template = templates.find((t) => t.id === templateId);
+        const allTemplates = [...templates, ...get().customTemplates];
+        const template = allTemplates.find((t) => t.id === templateId);
         if (template) {
           set({
             currentTemplateId: templateId,
@@ -84,6 +91,24 @@ export const useCardStore = create<CardStore>()(
       resetFields: () => {
         const template = get().currentTemplate;
         set({ fields: { ...getEmptyFields(), ...template.defaults } });
+      },
+
+      // Template management
+      addCustomTemplate: (template: TemplateDesign) => {
+        set((state) => ({
+          customTemplates: [
+            ...state.customTemplates.filter((t) => t.id !== template.id),
+            template,
+          ],
+        }));
+      },
+
+      removeCustomTemplate: (templateId: string) => {
+        set((state) => ({
+          customTemplates: state.customTemplates.filter(
+            (t) => t.id !== templateId
+          ),
+        }));
       },
 
       // Save/Load functionality
@@ -132,6 +157,7 @@ export const useCardStore = create<CardStore>()(
         currentTemplate: state.currentTemplate,
         fields: state.fields,
         logo: state.logo,
+        customTemplates: state.customTemplates,
         savedDesigns: state.savedDesigns,
       }),
     }

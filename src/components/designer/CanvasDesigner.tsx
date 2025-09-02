@@ -20,7 +20,13 @@ interface FieldDefinition {
   defaultSize: { w: number; h: number };
 }
 
-const CanvasDesigner: React.FC = () => {
+interface CanvasDesignerProps {
+  onNavigateToEditor?: () => void;
+}
+
+const CanvasDesigner: React.FC<CanvasDesignerProps> = ({
+  onNavigateToEditor,
+}) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [droppedFields, setDroppedFields] = useState<FieldSpec[]>([]);
   const [selectedField, setSelectedField] = useState<string | null>(null);
@@ -28,6 +34,7 @@ const CanvasDesigner: React.FC = () => {
     null
   );
   const [templateName, setTemplateName] = useState<string>("");
+  const [showGrid, setShowGrid] = useState<boolean>(true);
 
   const handleFieldDrop = (field: FieldSpec) => {
     // Check if field already exists
@@ -196,50 +203,202 @@ const CanvasDesigner: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-semibold text-gray-900">
-              Template Designer
-            </h1>
+          <div className="flex items-center justify-between h-16">
+            {/* Left Section - Title and Navigation */}
             <div className="flex items-center space-x-4">
-              <input
-                type="text"
-                placeholder="Template Name"
-                value={templateName}
-                onChange={(e) => setTemplateName(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                onClick={handleExportCanvasPNG}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                disabled={droppedFields.length === 0}
-                title="Export canvas as PNG image"
-              >
-                Export PNG
-              </button>
-              <button
-                onClick={handleExportCanvasPDF}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
-                disabled={droppedFields.length === 0}
-                title="Export canvas as PDF"
-              >
-                Export PDF
-              </button>
-              <button
-                onClick={generateTemplateJSON}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                disabled={droppedFields.length === 0 || !templateName.trim()}
-                title="Export template configuration as JSON"
-              >
-                Export Template
-              </button>
-              <button
-                onClick={clearCanvas}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Clear Canvas
-              </button>
+              <div className="flex items-center space-x-3">
+                <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h1 className="text-lg font-semibold text-gray-900">
+                    Template Designer
+                  </h1>
+                  <p className="text-xs text-gray-500 -mt-0.5">
+                    Create custom visiting card templates
+                  </p>
+                </div>
+              </div>
+
+              {onNavigateToEditor && (
+                <>
+                  <div className="h-6 w-px bg-gray-200"></div>
+                  <button
+                    onClick={onNavigateToEditor}
+                    className="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors duration-200"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-1.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      />
+                    </svg>
+                    Card Editor
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Right Section - Template Name and Actions */}
+            <div className="flex items-center space-x-4">
+              {/* Template Name Input */}
+              <div className="flex items-center space-x-2">
+                <label
+                  htmlFor="templateName"
+                  className="text-sm font-medium text-gray-700 whitespace-nowrap"
+                >
+                  Template Name:
+                </label>
+                <input
+                  id="templateName"
+                  type="text"
+                  placeholder="Enter template name"
+                  value={templateName}
+                  onChange={(e) => setTemplateName(e.target.value)}
+                  className="w-48 px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                />
+              </div>
+
+              <div className="h-6 w-px bg-gray-200"></div>
+
+              {/* Compact Action Buttons */}
+              <div className="flex items-center space-x-1">
+                {/* Grid Toggle */}
+                <button
+                  onClick={() => setShowGrid(!showGrid)}
+                  className={`inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${
+                    showGrid
+                      ? "bg-gray-800 text-white hover:bg-gray-700"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
+                  }`}
+                  title={showGrid ? "Hide Grid" : "Show Grid"}
+                >
+                  <svg
+                    className="w-3.5 h-3.5 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                  {showGrid ? "Hide" : "Show"} Grid
+                </button>
+
+                {/* Export Group */}
+                <div className="flex items-center bg-gray-50 rounded-md p-0.5">
+                  <button
+                    onClick={handleExportCanvasPNG}
+                    className="inline-flex items-center px-2 py-1.5 text-xs font-medium text-green-700 bg-white border border-green-200 rounded-sm hover:bg-green-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={droppedFields.length === 0}
+                    title="Export canvas as PNG image"
+                  >
+                    <svg
+                      className="w-3.5 h-3.5 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    PNG
+                  </button>
+                  <button
+                    onClick={handleExportCanvasPDF}
+                    className="inline-flex items-center px-2 py-1.5 text-xs font-medium text-purple-700 bg-white border border-purple-200 rounded-sm hover:bg-purple-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={droppedFields.length === 0}
+                    title="Export canvas as PDF"
+                  >
+                    <svg
+                      className="w-3.5 h-3.5 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                      />
+                    </svg>
+                    PDF
+                  </button>
+                </div>
+
+                <button
+                  onClick={generateTemplateJSON}
+                  className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={droppedFields.length === 0 || !templateName.trim()}
+                  title="Export template configuration as JSON"
+                >
+                  <svg
+                    className="w-3.5 h-3.5 mr-1.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  Export Template
+                </button>
+
+                <button
+                  onClick={clearCanvas}
+                  className="inline-flex items-center px-2.5 py-1.5 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors duration-200"
+                  title="Clear all fields from canvas"
+                >
+                  <svg
+                    className="w-3.5 h-3.5 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Clear
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -321,6 +480,7 @@ const CanvasDesigner: React.FC = () => {
                   onFieldMove={handleFieldMove}
                   onFieldSelect={setSelectedField}
                   selectedField={selectedField}
+                  showGrid={showGrid}
                 />
               </div>
             </div>

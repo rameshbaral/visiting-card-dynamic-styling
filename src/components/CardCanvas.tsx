@@ -5,13 +5,16 @@ import type { Shape, FieldSpec } from "../types";
 interface CardCanvasProps {
   isExporting?: boolean;
   isEditing?: boolean;
+  canvasRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 const CardCanvas: React.FC<CardCanvasProps> = ({
   isExporting = false,
   isEditing = true,
+  canvasRef: externalCanvasRef,
 }) => {
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const internalCanvasRef = useRef<HTMLDivElement>(null);
+  const canvasRef = externalCanvasRef || internalCanvasRef;
   const { currentTemplate, fields, logo, setField } = useCardStore();
   const [editingField, setEditingField] = useState<string | null>(null);
 
@@ -202,6 +205,7 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
     <div className="flex justify-center items-center p-8 bg-gray-100 min-h-screen">
       <div
         ref={canvasRef}
+        data-canvas-export
         className="relative bg-white rounded-2xl shadow-2xl overflow-hidden"
         style={{
           width: currentTemplate.size.width,

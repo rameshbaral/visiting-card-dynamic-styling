@@ -27,7 +27,9 @@ function App() {
 
   // If designer view is selected, show the designer component
   if (currentView === "designer") {
-    return <CanvasDesigner />;
+    return (
+      <CanvasDesigner onNavigateToEditor={() => setCurrentView("editor")} />
+    );
   }
 
   return (
@@ -73,9 +75,7 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Card Canvas */}
           <div className="lg:col-span-2">
-            <div ref={canvasRef}>
-              <CardCanvas />
-            </div>
+            <CardCanvas canvasRef={canvasRef} />
           </div>
 
           {/* Right Column - Controls */}

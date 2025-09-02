@@ -11,6 +11,7 @@ interface DropCanvasProps {
   ) => void;
   onFieldSelect: (fieldKey: string | null) => void;
   selectedField: string | null;
+  showGrid?: boolean;
 }
 
 const DropCanvas: React.FC<DropCanvasProps> = ({
@@ -20,6 +21,7 @@ const DropCanvas: React.FC<DropCanvasProps> = ({
   onFieldMove,
   onFieldSelect,
   selectedField,
+  showGrid = true,
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [draggedField, setDraggedField] = useState<string | null>(null);
@@ -147,26 +149,28 @@ const DropCanvas: React.FC<DropCanvasProps> = ({
         onClick={handleCanvasClick}
       >
         {/* Grid overlay for better positioning */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-          <svg width="100%" height="100%">
-            <defs>
-              <pattern
-                id="grid"
-                width="20"
-                height="20"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 20 0 L 0 0 0 20"
-                  fill="none"
-                  stroke="#e5e7eb"
-                  strokeWidth="1"
-                />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
+        {showGrid && (
+          <div className="absolute inset-0 pointer-events-none opacity-20">
+            <svg width="100%" height="100%">
+              <defs>
+                <pattern
+                  id="grid"
+                  width="20"
+                  height="20"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 20 0 L 0 0 0 20"
+                    fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="1"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+          </div>
+        )}
 
         {/* Render dropped fields */}
         {droppedFields.map((field, index) => (

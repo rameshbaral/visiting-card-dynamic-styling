@@ -16,13 +16,47 @@ const Toolbar: React.FC<ToolbarProps> = ({ canvasRef }) => {
 
   const handleDownloadPNG = async () => {
     if (canvasRef.current) {
-      await downloadAsPNG(canvasRef.current);
+      // Check if canvasRef.current itself has the data-canvas-export attribute
+      let canvasElement = canvasRef.current.hasAttribute("data-canvas-export")
+        ? canvasRef.current
+        : (canvasRef.current.querySelector(
+            "[data-canvas-export]"
+          ) as HTMLElement);
+
+      if (canvasElement) {
+        try {
+          await downloadAsPNG(canvasElement, "business-card.png");
+        } catch (error) {
+          console.error("PNG download failed:", error);
+          alert("Failed to download PNG. Please try again.");
+        }
+      } else {
+        console.error("Canvas element with [data-canvas-export] not found");
+        alert("Canvas not found. Please try again.");
+      }
     }
   };
 
   const handleDownloadPDF = async () => {
     if (canvasRef.current) {
-      await downloadAsPDF(canvasRef.current);
+      // Check if canvasRef.current itself has the data-canvas-export attribute
+      let canvasElement = canvasRef.current.hasAttribute("data-canvas-export")
+        ? canvasRef.current
+        : (canvasRef.current.querySelector(
+            "[data-canvas-export]"
+          ) as HTMLElement);
+
+      if (canvasElement) {
+        try {
+          await downloadAsPDF(canvasElement, "business-card.pdf");
+        } catch (error) {
+          console.error("PDF download failed:", error);
+          alert("Failed to download PDF. Please try again.");
+        }
+      } else {
+        console.error("Canvas element with [data-canvas-export] not found");
+        alert("Canvas not found. Please try again.");
+      }
     }
   };
 
