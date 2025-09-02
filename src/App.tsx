@@ -1,13 +1,17 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import CardCanvas from "./components/CardCanvas";
 import TemplatePicker from "./components/TemplatePicker";
 import Toolbar from "./components/Toolbar";
+import CanvasDesigner from "./components/designer/CanvasDesigner";
 import { useCardStore } from "./store/useCardStore";
 import "./App.css";
 
 function App() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const { currentTemplate, setLogo } = useCardStore();
+  const [currentView, setCurrentView] = useState<"editor" | "designer">(
+    "editor"
+  );
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -21,6 +25,11 @@ function App() {
     }
   };
 
+  // If designer view is selected, show the designer component
+  if (currentView === "designer") {
+    return <CanvasDesigner />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -30,8 +39,30 @@ function App() {
             <h1 className="text-xl font-semibold text-gray-900">
               Visiting Card Designer
             </h1>
-            <div className="text-sm text-gray-500">
-              Template: {currentTemplate.name}
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setCurrentView("editor")}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  currentView === "editor"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Card Editor
+              </button>
+              <button
+                onClick={() => setCurrentView("designer")}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  currentView === "designer"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Template Designer
+              </button>
+              <div className="text-sm text-gray-500">
+                Template: {currentTemplate.name}
+              </div>
             </div>
           </div>
         </div>
