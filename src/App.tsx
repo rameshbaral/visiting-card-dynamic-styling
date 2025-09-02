@@ -6,12 +6,12 @@ import CanvasDesigner from "./components/designer/CanvasDesigner";
 import { useCardStore } from "./store/useCardStore";
 import "./App.css";
 
+type ViewMode = "editor" | "designer";
+
 function App() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const { currentTemplate, setLogo } = useCardStore();
-  const [currentView, setCurrentView] = useState<"editor" | "designer">(
-    "editor"
-  );
+  const [currentView, setCurrentView] = useState<ViewMode>("editor");
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -43,7 +43,7 @@ function App() {
               <button
                 onClick={() => setCurrentView("editor")}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  currentView === "editor"
+                  (currentView as string) === "editor"
                     ? "bg-blue-600 text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
@@ -53,7 +53,7 @@ function App() {
               <button
                 onClick={() => setCurrentView("designer")}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  currentView === "designer"
+                  (currentView as string) === "designer"
                     ? "bg-blue-600 text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}

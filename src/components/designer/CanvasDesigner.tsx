@@ -71,7 +71,7 @@ const CanvasDesigner: React.FC = () => {
     }
   };
 
-  const handleDragStart = (field: FieldDefinition) => {
+  const handleDragStart = (_field: FieldDefinition) => {
     // Optional: Handle drag start if needed
   };
 

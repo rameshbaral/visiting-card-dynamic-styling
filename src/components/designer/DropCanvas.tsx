@@ -23,7 +23,7 @@ const DropCanvas: React.FC<DropCanvasProps> = ({
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [draggedField, setDraggedField] = useState<string | null>(null);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [_dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
