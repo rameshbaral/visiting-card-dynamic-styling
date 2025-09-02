@@ -1,0 +1,133 @@
+[
+  {
+    "key": "firstName",
+    "label": "First Name",
+    "placeholder": "First Name",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 20,
+      "weight": "bold",
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 35 }
+  },
+  {
+    "key": "lastName",
+    "label": "Last Name",
+    "placeholder": "Last Name",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 20,
+      "weight": "bold",
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 35 }
+  },
+  {
+    "key": "occupation",
+    "label": "Occupation",
+    "placeholder": "Occupation",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 16,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 32 }
+  },
+  {
+    "key": "company",
+    "label": "Company",
+    "placeholder": "Company Name",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 16,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 32 }
+  },
+  {
+    "key": "mobile",
+    "label": "Mobile",
+    "placeholder": "Mobile Number",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 13,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 27 }
+  },
+  {
+    "key": "landline",
+    "label": "Landline",
+    "placeholder": "Landline Number",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 13,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 27 }
+  },
+  {
+    "key": "email",
+    "label": "Email",
+    "placeholder": "Email Address",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 13,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 27 }
+  },
+  {
+    "key": "website",
+    "label": "Website",
+    "placeholder": "Website URL",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 13,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 27 }
+  },
+  {
+    "key": "fax",
+    "label": "Fax",
+    "placeholder": "Fax Number",
+    "type": "text",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 13,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 27 }
+  },
+  {
+    "key": "address",
+    "label": "Address",
+    "placeholder": "Address",
+    "type": "textarea",
+    "defaultStyle": {
+      "fontFamily": "Inter, ui-sans-serif",
+      "fontSize": 13,
+      "color": "#000000"
+    },
+    "defaultSize": { "w": 220, "h": 50 }
+  },
+  {
+    "key": "logo",
+    "label": "Logo",
+    "placeholder": "Logo",
+    "type": "image",
+    "defaultStyle": {},
+    "defaultSize": { "w": 73, "h": 73 }
+  }
+]
+
