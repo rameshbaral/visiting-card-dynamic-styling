@@ -7,6 +7,7 @@ export type SavedDesign = {
   templateId: string;
   fields: Record<FieldKey, string>;
   logo: string | null;
+  picture: string | null;
   name: string;
   createdAt: string;
 };
@@ -17,11 +18,13 @@ interface CardStore {
   currentTemplate: TemplateDesign;
   fields: Record<FieldKey, string>;
   logo: string | null;
+  picture: string | null;
 
   // Actions
   setTemplate: (templateId: string) => void;
   setField: (key: FieldKey, value: string) => void;
   setLogo: (logoDataUrl: string | null) => void;
+  setPicture: (pictureDataUrl: string | null) => void;
   resetFields: () => void;
 
   // Template management
@@ -48,6 +51,7 @@ const getEmptyFields = (): Record<FieldKey, string> => ({
   email: "",
   website: "",
   logo: "",
+  picture: "",
 });
 
 export const useCardStore = create<CardStore>()(
@@ -58,6 +62,7 @@ export const useCardStore = create<CardStore>()(
       currentTemplate: getDefaultTemplate(),
       fields: getEmptyFields(),
       logo: null,
+      picture: null,
       customTemplates: [],
       savedDesigns: [],
 
@@ -88,9 +93,17 @@ export const useCardStore = create<CardStore>()(
         set({ logo: logoDataUrl });
       },
 
+      setPicture: (pictureDataUrl: string | null) => {
+        set({ picture: pictureDataUrl });
+      },
+
       resetFields: () => {
         const template = get().currentTemplate;
-        set({ fields: { ...getEmptyFields(), ...template.defaults } });
+        set({
+          fields: { ...getEmptyFields(), ...template.defaults },
+          logo: null,
+          picture: null,
+        });
       },
 
       // Template management
@@ -118,6 +131,7 @@ export const useCardStore = create<CardStore>()(
           templateId: state.currentTemplateId,
           fields: state.fields,
           logo: state.logo,
+          picture: state.picture,
           name,
           createdAt: new Date().toISOString(),
         };
@@ -140,6 +154,7 @@ export const useCardStore = create<CardStore>()(
             currentTemplate: template || getDefaultTemplate(),
             fields: design.fields,
             logo: design.logo,
+            picture: design.picture || null,
           });
         }
       },
@@ -157,6 +172,7 @@ export const useCardStore = create<CardStore>()(
         currentTemplate: state.currentTemplate,
         fields: state.fields,
         logo: state.logo,
+        picture: state.picture,
         customTemplates: state.customTemplates,
         savedDesigns: state.savedDesigns,
       }),

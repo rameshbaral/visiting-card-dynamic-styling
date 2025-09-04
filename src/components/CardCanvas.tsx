@@ -16,7 +16,7 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
 }) => {
   const internalCanvasRef = useRef<HTMLDivElement>(null);
   const canvasRef = externalCanvasRef || internalCanvasRef;
-  const { currentTemplate, fields, logo, setField } = useCardStore();
+  const { currentTemplate, fields, logo, picture, setField } = useCardStore();
   const [editingField, setEditingField] = useState<string | null>(null);
 
   const renderShape = (shape: Shape, index: number) => {
@@ -119,7 +119,9 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
       if (
         isEditing &&
         field.key !== "logo" &&
-        (field.type || "text") !== "icon"
+        field.key !== "picture" &&
+        (field.type || "text") !== "icon" &&
+        (field.type || "text") !== "image"
       ) {
         setEditingField(field.key);
       }
@@ -164,6 +166,23 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
               Logo
             </div>
           )
+        ) : field.key === "picture" ? (
+          picture ? (
+            <img
+              src={picture}
+              alt="Profile Picture"
+              className="w-full h-full object-cover rounded-full"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm border-2 border-dashed border-gray-300 rounded-full">
+              Picture
+            </div>
+          )
+        ) : (field.type || "text") === "image" ? (
+          // Handle other image type fields
+          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm border-2 border-dashed border-gray-300 rounded">
+            {field.placeholder || "Image"}
+          </div>
         ) : (field.type || "text") === "icon" ? (
           field.iconId ? (
             <div className="w-full h-full flex items-center justify-center pointer-events-none">

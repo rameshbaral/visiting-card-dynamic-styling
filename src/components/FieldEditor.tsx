@@ -3,7 +3,7 @@ import { useCardStore } from "../store/useCardStore";
 import type { FieldKey } from "../types";
 
 const FieldEditor: React.FC = () => {
-  const { fields, setField, setLogo } = useCardStore();
+  const { fields, logo, picture, setField, setLogo, setPicture } = useCardStore();
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -12,6 +12,18 @@ const FieldEditor: React.FC = () => {
       reader.onload = (e) => {
         const result = e.target?.result as string;
         setLogo(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePictureUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setPicture(result);
       };
       reader.readAsDataURL(file);
     }
@@ -78,9 +90,26 @@ const FieldEditor: React.FC = () => {
             onChange={handleLogoUpload}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          {fields.logo && (
+          {logo && (
             <p className="text-xs text-gray-500 mt-1">
               Logo uploaded successfully
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Profile Picture
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handlePictureUpload}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          {picture && (
+            <p className="text-xs text-gray-500 mt-1">
+              Picture uploaded successfully
             </p>
           )}
         </div>

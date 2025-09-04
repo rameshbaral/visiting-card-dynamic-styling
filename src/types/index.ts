@@ -9,7 +9,8 @@ export type FieldKey =
   | "company"
   | "email"
   | "website"
-  | "logo";
+  | "logo"
+  | "picture";
 
 export type BoundingBox = { x: number; y: number; w: number; h: number }; // pixels on a 1050x600 canvas
 

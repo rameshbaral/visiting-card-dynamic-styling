@@ -10,7 +10,7 @@ type ViewMode = "editor" | "designer";
 
 function App() {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const { currentTemplate, setLogo } = useCardStore();
+  const { currentTemplate, setLogo, setPicture } = useCardStore();
   const [currentView, setCurrentView] = useState<ViewMode>("editor");
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +20,18 @@ function App() {
       reader.onload = (e) => {
         const result = e.target?.result as string;
         setLogo(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePictureUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setPicture(result);
       };
       reader.readAsDataURL(file);
     }
@@ -104,6 +116,19 @@ function App() {
                 type="file"
                 accept="image/*"
                 onChange={handleLogoUpload}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Picture Upload */}
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">
+                Upload Profile Picture
+              </h3>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePictureUpload}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>

@@ -140,6 +140,7 @@
     {
       "key": "logo",
       "label": "Logo (upload)",
+      "type": "image",
       "box": { "x": 550, "y": 65, "w": 73, "h": 73 },
       "style": {
         "fontFamily": "Inter, ui-sans-serif",
