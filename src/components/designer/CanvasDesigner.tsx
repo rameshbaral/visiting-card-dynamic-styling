@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
-import DraggableField from "./DraggableField";
+import DraggableFieldSidebar from "./DraggableFieldSidebar";
 import DropCanvas from "./DropCanvas";
 import BackgroundSelector from "./BackgroundSelector";
 import { downloadAsPNG, downloadAsPDF } from "../../utils/download";
 import type { FieldSpec } from "../../types";
-import fieldDefinitions from "../../data/fieldDefinitions.json";
 
 interface FieldDefinition {
   key: string;
@@ -76,6 +75,40 @@ const CanvasDesigner: React.FC<CanvasDesignerProps> = ({
     if (selectedField === fieldKey) {
       setSelectedField(null);
     }
+  };
+
+  const handleFieldStyleUpdate = (
+    fieldKey: string,
+    styleUpdates: Partial<FieldSpec["style"]>
+  ) => {
+    setDroppedFields(
+      droppedFields.map((field) =>
+        field.key === fieldKey
+          ? { ...field, style: { ...field.style, ...styleUpdates } }
+          : field
+      )
+    );
+  };
+
+  const handleFieldResize = (
+    fieldKey: string,
+    newSize: { w: number; h: number }
+  ) => {
+    setDroppedFields(
+      droppedFields.map((field) =>
+        field.key === fieldKey
+          ? { ...field, box: { ...field.box, ...newSize } }
+          : field
+      )
+    );
+  };
+
+  const handleFieldIconUpdate = (fieldKey: string, iconId: string | null) => {
+    setDroppedFields(
+      droppedFields.map((field) =>
+        field.key === fieldKey ? { ...field, iconId } : field
+      )
+    );
   };
 
   const handleDragStart = (_field: FieldDefinition) => {
@@ -201,7 +234,7 @@ const CanvasDesigner: React.FC<CanvasDesignerProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="h-screen bg-gray-100 flex flex-col">
       {/* Header */}
       <header className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -404,104 +437,280 @@ const CanvasDesigner: React.FC<CanvasDesignerProps> = ({
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Left Sidebar - Fields */}
-          <div className="lg:col-span-1">
-            <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">
-                Available Fields
+      {/* Field Properties Toolbar - Always Present (Canva Style) */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          {selectedField ? (
+            (() => {
+              const field = droppedFields.find((f) => f.key === selectedField);
+              if (!field) return null;
+
+              return (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        {field.type === "icon"
+                          ? "Styling Icon:"
+                          : "Editing Field:"}
+                      </span>
+                      <span className="text-sm font-semibold text-blue-600">
+                        {field.label}
+                      </span>
+                      {field.type === "icon" && (
+                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                          Visual Element
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Font Size / Icon Size */}
+                    <div className="flex items-center space-x-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        {field.type === "icon" ? "Icon Size:" : "Font Size:"}
+                      </label>
+                      <input
+                        type="range"
+                        min="8"
+                        max="32"
+                        value={field.style.fontSize}
+                        onChange={(e) =>
+                          handleFieldStyleUpdate(selectedField, {
+                            fontSize: parseInt(e.target.value),
+                          })
+                        }
+                        className="w-20 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                      <span className="text-sm text-gray-600 min-w-[35px]">
+                        {field.style.fontSize}px
+                      </span>
+                    </div>
+
+                    {/* Font Family */}
+                    <div className="flex items-center space-x-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Font:
+                      </label>
+                      <select
+                        value={field.style.fontFamily}
+                        onChange={(e) =>
+                          handleFieldStyleUpdate(selectedField, {
+                            fontFamily: e.target.value,
+                          })
+                        }
+                        className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      >
+                        <option value="Inter, ui-sans-serif">Inter</option>
+                        <option value="Roboto, sans-serif">Roboto</option>
+                        <option value="Open Sans, sans-serif">Open Sans</option>
+                        <option value="Lato, sans-serif">Lato</option>
+                        <option value="Montserrat, sans-serif">
+                          Montserrat
+                        </option>
+                        <option value="Poppins, sans-serif">Poppins</option>
+                        <option value="Playfair Display, serif">
+                          Playfair Display
+                        </option>
+                        <option value="Merriweather, serif">
+                          Merriweather
+                        </option>
+                        <option value="Source Sans Pro, sans-serif">
+                          Source Sans Pro
+                        </option>
+                        <option value="Nunito, sans-serif">Nunito</option>
+                      </select>
+                    </div>
+
+                    {/* Font Weight */}
+                    <div className="flex items-center space-x-1">
+                      <button
+                        onClick={() =>
+                          handleFieldStyleUpdate(selectedField, { weight: 400 })
+                        }
+                        className={`px-3 py-1.5 text-sm rounded font-medium transition-colors ${
+                          field.style.weight === 400 ||
+                          field.style.weight === undefined
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        Normal
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleFieldStyleUpdate(selectedField, {
+                            weight: "bold",
+                          })
+                        }
+                        className={`px-3 py-1.5 text-sm rounded font-bold transition-colors ${
+                          field.style.weight === "bold"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        Bold
+                      </button>
+                    </div>
+
+                    {/* Color Picker */}
+                    <div className="flex items-center space-x-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Color:
+                      </label>
+                      <input
+                        type="color"
+                        value={field.style.color}
+                        onChange={(e) =>
+                          handleFieldStyleUpdate(selectedField, {
+                            color: e.target.value,
+                          })
+                        }
+                        className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
+                      />
+
+                      {/* Quick Colors */}
+                      <div className="flex space-x-1 ml-2">
+                        {[
+                          { color: "#000000", name: "Black" },
+                          { color: "#374151", name: "Dark Gray" },
+                          { color: "#6b7280", name: "Gray" },
+                          { color: "#0066cc", name: "Blue" },
+                          { color: "#dc2626", name: "Red" },
+                          { color: "#059669", name: "Green" },
+                        ].map((preset) => (
+                          <button
+                            key={preset.color}
+                            onClick={() =>
+                              handleFieldStyleUpdate(selectedField, {
+                                color: preset.color,
+                              })
+                            }
+                            className={`w-6 h-6 rounded border transition-all ${
+                              field.style.color === preset.color
+                                ? "border-gray-800 ring-2 ring-blue-300"
+                                : "border-gray-300 hover:border-gray-400"
+                            }`}
+                            style={{ backgroundColor: preset.color }}
+                            title={preset.name}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-500">
+                      {field.box.x}px, {field.box.y}px • {field.box.w}×
+                      {field.box.h}px
+                    </span>
+                    <button
+                      onClick={() => handleFieldDelete(selectedField)}
+                      className="px-3 py-1.5 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              );
+            })()
+          ) : (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <span className="text-sm font-medium text-gray-700">
+                  Canvas Controls:
+                </span>
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm text-gray-600">Fields:</label>
+                    <span className="text-sm font-medium text-blue-600">
+                      {droppedFields.length}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm text-gray-600">Grid:</label>
+                    <button
+                      onClick={() => setShowGrid(!showGrid)}
+                      className={`px-2 py-1 text-xs rounded transition-colors ${
+                        showGrid
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                    >
+                      {showGrid ? "ON" : "OFF"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="text-sm text-gray-500">
+                Select a field to access styling controls
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content Layout */}
+      <div className="flex-1 flex">
+        {/* Left Sidebar - Fields */}
+        <div className="w-80 bg-gray-50 border-r border-gray-200 overflow-y-auto">
+          <div className="p-4">
+            <DraggableFieldSidebar onDragStart={handleDragStart} />
+          </div>
+        </div>
+
+        {/* Center - Canvas */}
+        <div className="flex-1 bg-gray-100 flex items-start justify-center pt-6">
+          <div className="bg-white rounded-lg shadow-md p-3">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-semibold text-gray-800">
+                Design Canvas
               </h3>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {fieldDefinitions.map((field) => (
-                  <DraggableField
-                    key={field.key}
-                    field={field}
-                    onDragStart={handleDragStart}
-                  />
-                ))}
+              <div className="text-sm text-gray-600">
+                {droppedFields.length} fields •{" "}
+                {selectedField
+                  ? `Selected: ${
+                      droppedFields.find((f) => f.key === selectedField)?.label
+                    }`
+                  : "No selection"}
               </div>
             </div>
 
-            {/* Background Selector */}
+            <div ref={canvasRef}>
+              <DropCanvas
+                backgroundImage={selectedBackground}
+                droppedFields={droppedFields}
+                onFieldDrop={handleFieldDrop}
+                onFieldMove={handleFieldMove}
+                onFieldSelect={setSelectedField}
+                onFieldDelete={handleFieldDelete}
+                onFieldResize={handleFieldResize}
+                onFieldIconUpdate={handleFieldIconUpdate}
+                selectedField={selectedField}
+                showGrid={showGrid}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar - Backgrounds */}
+        <div className="w-80 bg-gray-50 border-l border-gray-200 overflow-y-auto">
+          <div className="p-4">
             <BackgroundSelector
               selectedBackground={selectedBackground}
               onBackgroundSelect={setSelectedBackground}
             />
 
-            {/* Field Properties */}
-            {selectedField && (
-              <div className="bg-white p-4 rounded-lg border border-gray-200 mt-6">
-                <h3 className="text-lg font-semibold mb-4 text-gray-800">
-                  Field Properties
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Selected Field
-                    </label>
-                    <div className="text-sm text-gray-600">
-                      {
-                        droppedFields.find((f) => f.key === selectedField)
-                          ?.label
-                      }
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleFieldDelete(selectedField)}
-                    className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
-                  >
-                    Delete Field
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right Content - Canvas */}
-          <div className="lg:col-span-3">
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Design Canvas
-                </h3>
-                <div className="text-sm text-gray-600">
-                  Fields: {droppedFields.length} | Selected:{" "}
-                  {selectedField || "None"}
-                </div>
-              </div>
-
-              <div ref={canvasRef}>
-                <DropCanvas
-                  backgroundImage={selectedBackground}
-                  droppedFields={droppedFields}
-                  onFieldDrop={handleFieldDrop}
-                  onFieldMove={handleFieldMove}
-                  onFieldSelect={setSelectedField}
-                  selectedField={selectedField}
-                  showGrid={showGrid}
-                />
-              </div>
-            </div>
-
-            {/* Instructions */}
+            {/* Canvas Instructions */}
             <div className="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
               <h4 className="text-sm font-semibold text-blue-800 mb-2">
-                Instructions:
+                Quick Guide:
               </h4>
               <ul className="text-sm text-blue-700 space-y-1">
-                <li>
-                  • Drag fields from the left sidebar to place them on the
-                  canvas
-                </li>
-                <li>• Click and drag placed fields to reposition them</li>
-                <li>• Select a background image or use no background</li>
-                <li>• Click on placed fields to select and view properties</li>
-                <li>
-                  • Enter a template name and click "Export Template" to
-                  download the JSON
-                </li>
+                <li>• Drag fields from left to canvas</li>
+                <li>• Click fields to select and style</li>
+                <li>• Choose backgrounds from right</li>
+                <li>• Use grid toggle for alignment</li>
+                <li>• Export when ready</li>
               </ul>
             </div>
           </div>

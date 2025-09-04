@@ -37,6 +37,8 @@ const DraggableField: React.FC<DraggableFieldProps> = ({
         return "📄";
       case "image":
         return "🖼️";
+      case "icon":
+        return "⭐";
       default:
         return "📝";
     }
@@ -61,4 +63,3 @@ const DraggableField: React.FC<DraggableFieldProps> = ({
 };
 
 export default DraggableField;
-

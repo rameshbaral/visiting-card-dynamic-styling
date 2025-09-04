@@ -31,6 +31,8 @@ export type FieldSpec = {
   box: BoundingBox;
   style: TextStyle;
   placeholder?: string;
+  iconId?: string | null;
+  type?: "text" | "image" | "icon" | "textarea";
 };
 
 export type Shape =

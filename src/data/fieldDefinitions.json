@@ -1,133 +1,395 @@
-[
-  {
-    "key": "firstName",
-    "label": "First Name",
-    "placeholder": "First Name",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 20,
-      "weight": "bold",
-      "color": "#000000"
+{
+  "userBased": [
+    {
+      "key": "firstName",
+      "label": "First Name",
+      "placeholder": "John",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 120, "h": 30 }
     },
-    "defaultSize": { "w": 220, "h": 35 }
-  },
-  {
-    "key": "lastName",
-    "label": "Last Name",
-    "placeholder": "Last Name",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 20,
-      "weight": "bold",
-      "color": "#000000"
+    {
+      "key": "lastName",
+      "label": "Last Name",
+      "placeholder": "Doe",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 120, "h": 30 }
     },
-    "defaultSize": { "w": 220, "h": 35 }
-  },
-  {
-    "key": "occupation",
-    "label": "Occupation",
-    "placeholder": "Occupation",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 16,
-      "color": "#000000"
+    {
+      "key": "nameAR",
+      "label": "Name AR",
+      "placeholder": "الاسم بالعربية",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 30 }
     },
-    "defaultSize": { "w": 220, "h": 32 }
-  },
-  {
-    "key": "company",
-    "label": "Company",
-    "placeholder": "Company Name",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 16,
-      "color": "#000000"
+    {
+      "key": "directNumber",
+      "label": "Direct Number",
+      "placeholder": "+1 234 567 8900",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 25 }
     },
-    "defaultSize": { "w": 220, "h": 32 }
-  },
-  {
-    "key": "mobile",
-    "label": "Mobile",
-    "placeholder": "Mobile Number",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 13,
-      "color": "#000000"
+    {
+      "key": "occupation",
+      "label": "Occupation / Title",
+      "placeholder": "Software Engineer",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 14,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 150, "h": 28 }
     },
-    "defaultSize": { "w": 220, "h": 27 }
-  },
-  {
-    "key": "landline",
-    "label": "Landline",
-    "placeholder": "Landline Number",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 13,
-      "color": "#000000"
+    {
+      "key": "occupationAR",
+      "label": "Occupation AR / Title AR",
+      "placeholder": "مهندس برمجيات",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 14,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 150, "h": 28 }
     },
-    "defaultSize": { "w": 220, "h": 27 }
-  },
-  {
-    "key": "email",
-    "label": "Email",
-    "placeholder": "Email Address",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 13,
-      "color": "#000000"
+    {
+      "key": "branch",
+      "label": "Branch / Region",
+      "placeholder": "North Region",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 130, "h": 25 }
     },
-    "defaultSize": { "w": 220, "h": 27 }
-  },
-  {
-    "key": "website",
-    "label": "Website",
-    "placeholder": "Website URL",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 13,
-      "color": "#000000"
+    {
+      "key": "company",
+      "label": "Company",
+      "placeholder": "Tech Corp",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 14,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 28 }
     },
-    "defaultSize": { "w": 220, "h": 27 }
-  },
-  {
-    "key": "fax",
-    "label": "Fax",
-    "placeholder": "Fax Number",
-    "type": "text",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 13,
-      "color": "#000000"
+    {
+      "key": "department",
+      "label": "Department / Segment",
+      "placeholder": "IT Department",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 25 }
     },
-    "defaultSize": { "w": 220, "h": 27 }
-  },
-  {
-    "key": "address",
-    "label": "Address",
-    "placeholder": "Address",
-    "type": "textarea",
-    "defaultStyle": {
-      "fontFamily": "Inter, ui-sans-serif",
-      "fontSize": 13,
-      "color": "#000000"
+    {
+      "key": "departmentAR",
+      "label": "Department AR",
+      "placeholder": "قسم تقنية المعلومات",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 25 }
     },
-    "defaultSize": { "w": 220, "h": 50 }
-  },
-  {
-    "key": "logo",
-    "label": "Logo",
-    "placeholder": "Logo",
-    "type": "image",
-    "defaultStyle": {},
-    "defaultSize": { "w": 73, "h": 73 }
-  }
-]
-
+    {
+      "key": "landLine",
+      "label": "Land Line",
+      "placeholder": "+1 234 567 0000",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 25 }
+    },
+    {
+      "key": "ext",
+      "label": "Ext",
+      "placeholder": "1234",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 60, "h": 25 }
+    },
+    {
+      "key": "mobile",
+      "label": "Mobile",
+      "placeholder": "+1 234 567 8900",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 25 }
+    },
+    {
+      "key": "email",
+      "label": "Email",
+      "placeholder": "john@example.com",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 180, "h": 25 }
+    },
+    {
+      "key": "email2",
+      "label": "Email2",
+      "placeholder": "john.doe@example.com",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 180, "h": 25 }
+    },
+    {
+      "key": "fax",
+      "label": "Fax",
+      "placeholder": "+1 234 567 0001",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 140, "h": 25 }
+    },
+    {
+      "key": "website",
+      "label": "Website",
+      "placeholder": "www.example.com",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#0066cc"
+      },
+      "defaultSize": { "w": 150, "h": 25 }
+    },
+    {
+      "key": "address",
+      "label": "Address",
+      "placeholder": "123 Main St, City, Country",
+      "type": "textarea",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 12,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 200, "h": 50 }
+    },
+    {
+      "key": "picture",
+      "label": "Picture (Image)",
+      "placeholder": "Profile Picture",
+      "type": "image",
+      "defaultStyle": {},
+      "defaultSize": { "w": 80, "h": 80 }
+    },
+    {
+      "key": "phoneIcon",
+      "label": "Phone Icon",
+      "placeholder": "Phone",
+      "type": "icon",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "color": "#374151"
+      },
+      "defaultSize": { "w": 24, "h": 24 },
+      "defaultIcon": "phone"
+    },
+    {
+      "key": "emailIcon",
+      "label": "Email Icon",
+      "placeholder": "Email",
+      "type": "icon",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "color": "#374151"
+      },
+      "defaultSize": { "w": 24, "h": 24 },
+      "defaultIcon": "email"
+    },
+    {
+      "key": "locationIcon",
+      "label": "Address Icon",
+      "placeholder": "Location",
+      "type": "icon",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "color": "#374151"
+      },
+      "defaultSize": { "w": 24, "h": 24 },
+      "defaultIcon": "location"
+    },
+    {
+      "key": "websiteIcon",
+      "label": "Website Icon",
+      "placeholder": "Website",
+      "type": "icon",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 16,
+        "color": "#374151"
+      },
+      "defaultSize": { "w": 24, "h": 24 },
+      "defaultIcon": "website"
+    }
+  ],
+  "companyBased": [
+    {
+      "key": "companyName",
+      "label": "Company Name",
+      "placeholder": "Tech Corporation",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 20,
+        "weight": "bold",
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 250, "h": 40 }
+    },
+    {
+      "key": "companyTel",
+      "label": "Company Tel",
+      "placeholder": "+1 234 567 0000",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 14,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 150, "h": 28 }
+    },
+    {
+      "key": "companyFax",
+      "label": "Company Fax",
+      "placeholder": "+1 234 567 0001",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 14,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 150, "h": 28 }
+    },
+    {
+      "key": "logo",
+      "label": "Logo (Image)",
+      "placeholder": "Company Logo",
+      "type": "image",
+      "defaultStyle": {},
+      "defaultSize": { "w": 100, "h": 100 }
+    },
+    {
+      "key": "website",
+      "label": "Website",
+      "placeholder": "www.company.com",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 14,
+        "color": "#0066cc"
+      },
+      "defaultSize": { "w": 180, "h": 28 }
+    },
+    {
+      "key": "socialMedia",
+      "label": "Social Media Icons",
+      "placeholder": "@company",
+      "type": "text",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 13,
+        "color": "#000000"
+      },
+      "defaultSize": { "w": 150, "h": 30 }
+    },
+    {
+      "key": "linkedinIcon",
+      "label": "LinkedIn Icon",
+      "placeholder": "LinkedIn",
+      "type": "icon",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 20,
+        "color": "#0077b5"
+      },
+      "defaultSize": { "w": 32, "h": 32 },
+      "defaultIcon": "linkedin"
+    },
+    {
+      "key": "twitterIcon",
+      "label": "Twitter Icon",
+      "placeholder": "Twitter",
+      "type": "icon",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 20,
+        "color": "#1da1f2"
+      },
+      "defaultSize": { "w": 32, "h": 32 },
+      "defaultIcon": "twitter"
+    },
+    {
+      "key": "instagramIcon",
+      "label": "Instagram Icon",
+      "placeholder": "Instagram",
+      "type": "icon",
+      "defaultStyle": {
+        "fontFamily": "Inter, ui-sans-serif",
+        "fontSize": 20,
+        "color": "#e4405f"
+      },
+      "defaultSize": { "w": 32, "h": 32 },
+      "defaultIcon": "instagram"
+    }
+  ],
+  "custom": []
+}

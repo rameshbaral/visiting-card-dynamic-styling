@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useCardStore } from "../store/useCardStore";
 import type { Shape, FieldSpec } from "../types";
+import { iconLibrary, IconDisplay } from "./designer/IconLibrary";
 
 interface CardCanvasProps {
   isExporting?: boolean;
@@ -115,7 +116,11 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
     };
 
     const handleFieldClick = () => {
-      if (isEditing && field.key !== "logo") {
+      if (
+        isEditing &&
+        field.key !== "logo" &&
+        (field.type || "text") !== "icon"
+      ) {
         setEditingField(field.key);
       }
     };
@@ -159,6 +164,20 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
               Logo
             </div>
           )
+        ) : (field.type || "text") === "icon" ? (
+          field.iconId ? (
+            <div className="w-full h-full flex items-center justify-center pointer-events-none">
+              <IconDisplay
+                icon={iconLibrary.find((icon) => icon.id === field.iconId)!}
+                size={Math.min(field.box.w - 4, field.box.h - 4)}
+                color={field.style.color}
+              />
+            </div>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm pointer-events-none">
+              {field.placeholder}
+            </div>
+          )
         ) : isEditing && isEditingThisField ? (
           field.key === "address" ? (
             <textarea
@@ -187,8 +206,10 @@ const CardCanvas: React.FC<CardCanvasProps> = ({
         ) : (
           <div
             className={`w-full h-full flex items-center ${
-              isEditing
+              isEditing && (field.type || "text") !== "icon"
                 ? "cursor-text hover:bg-white hover:bg-opacity-10 rounded px-1"
+                : (field.type || "text") === "icon"
+                ? "pointer-events-none"
                 : ""
             }`}
             style={textStyle}
