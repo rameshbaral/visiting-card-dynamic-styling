@@ -27,6 +27,9 @@ const DraggableFieldSidebar: React.FC<DraggableFieldSidebarProps> = ({
     fieldDefinitions.custom
   );
   const [showCustomFieldForm, setShowCustomFieldForm] = useState(false);
+  const [collapsedSections, setCollapsedSections] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [newFieldForm, setNewFieldForm] = useState({
     key: "",
     label: "",
@@ -38,6 +41,44 @@ const DraggableFieldSidebar: React.FC<DraggableFieldSidebarProps> = ({
     width: 150,
     height: 25,
   });
+
+  const toggleSection = (section: string) => {
+    setCollapsedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
+  // Group user-based fields into logical categories for better organization
+  const getUserFieldGroups = () => {
+    const userFields = fieldDefinitions.userBased as FieldDefinition[];
+    return {
+      "Personal Info": userFields.filter((f) =>
+        ["firstName", "lastName", "nameAR", "picture"].includes(f.key)
+      ),
+      "Contact Details": userFields.filter((f) =>
+        [
+          "directNumber",
+          "mobile",
+          "email",
+          "email2",
+          "phoneIcon",
+          "emailIcon",
+        ].includes(f.key)
+      ),
+      Professional: userFields.filter((f) =>
+        ["occupation", "occupationAR", "department", "departmentAR"].includes(
+          f.key
+        )
+      ),
+      "Company Info": userFields.filter((f) =>
+        ["company", "branch", "landLineExt", "fax"].includes(f.key)
+      ),
+      "Online & Location": userFields.filter((f) =>
+        ["website", "address", "websiteIcon", "locationIcon"].includes(f.key)
+      ),
+    };
+  };
 
   const getCurrentFields = (): FieldDefinition[] => {
     return fieldDefinitions[selectedTemplateType] as FieldDefinition[];
@@ -91,7 +132,7 @@ const DraggableFieldSidebar: React.FC<DraggableFieldSidebarProps> = ({
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-gray-200 h-full overflow-y-auto">
+    <div className="space-y-4">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
           Available Fields
@@ -132,19 +173,70 @@ const DraggableFieldSidebar: React.FC<DraggableFieldSidebarProps> = ({
       </div>
 
       {/* Predefined Fields */}
-      <div className="space-y-2 mb-6">
-        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+      <div className="mb-6">
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">
           {selectedTemplateType === "userBased"
             ? "User Based Fields"
             : "Company Based Fields"}
         </h4>
-        {getCurrentFields().map((field) => (
-          <DraggableField
-            key={field.key}
-            field={field}
-            onDragStart={onDragStart}
-          />
-        ))}
+
+        {selectedTemplateType === "userBased" ? (
+          // Organized user fields with collapsible sections
+          <div className="space-y-3">
+            {Object.entries(getUserFieldGroups()).map(([groupName, fields]) => (
+              <div
+                key={groupName}
+                className="border border-gray-200 rounded-lg"
+              >
+                <button
+                  onClick={() => toggleSection(groupName)}
+                  className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-t-lg flex items-center justify-between transition-colors"
+                >
+                  <span>
+                    {groupName} ({fields.length})
+                  </span>
+                  <svg
+                    className={`w-4 h-4 transform transition-transform ${
+                      collapsedSections[groupName] ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                {!collapsedSections[groupName] && (
+                  <div className="p-2 space-y-1 bg-white rounded-b-lg">
+                    {fields.map((field) => (
+                      <DraggableField
+                        key={field.key}
+                        field={field}
+                        onDragStart={onDragStart}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          // Simple list for company fields (fewer items)
+          <div className="space-y-2">
+            {getCurrentFields().map((field) => (
+              <DraggableField
+                key={field.key}
+                field={field}
+                onDragStart={onDragStart}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Custom Fields Section */}

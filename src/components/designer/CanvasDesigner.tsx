@@ -652,9 +652,11 @@ const CanvasDesigner: React.FC<CanvasDesignerProps> = ({
       {/* Main Content Layout */}
       <div className="flex-1 flex">
         {/* Left Sidebar - Fields */}
-        <div className="w-80 bg-gray-50 border-r border-gray-200 overflow-y-auto">
-          <div className="p-4">
-            <DraggableFieldSidebar onDragStart={handleDragStart} />
+        <div className="w-80 bg-gray-50 border-r border-gray-200 flex flex-col">
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-4">
+              <DraggableFieldSidebar onDragStart={handleDragStart} />
+            </div>
           </div>
         </div>
 
